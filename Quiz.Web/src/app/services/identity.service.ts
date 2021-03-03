@@ -35,10 +35,10 @@ export class IdentityService {
   }
 
   public isAuthenticated(): Boolean {
-    return this.getToken() !== null;
+    return this.getUserId() != null;
   }
 
-  private getToken(): string {
-    return localStorage.getItem('token');
+  private getUserId(): string {
+    return localStorage.getItem('userId');
   }
 }

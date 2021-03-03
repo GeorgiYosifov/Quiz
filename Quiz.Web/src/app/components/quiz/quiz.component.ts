@@ -18,7 +18,6 @@ export class QuizComponent {
 
   private userSelections: IUserSelection[] = [];
   public questions: IQuestion[];
-  //public showChart = false;
 
   constructor(private quizService: QuizService,
     private renderer: Renderer2) { }
@@ -43,8 +42,6 @@ export class QuizComponent {
       this.quizService.checkQuiz(body).subscribe((data: IQuizResult) => {
         this.chart.doughnutChartData = [data.wrong, data.correct];
         this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
-        
-        console.log(data);
       });
     }
   }

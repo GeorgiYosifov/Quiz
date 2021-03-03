@@ -6,7 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent {
-  public doughnutChartLabels = ['Wrong', 'Corrct'];
+  public doughnutChartLabels: string[] = ['Wrong', 'Correct'];
   public doughnutChartData = [];
-  public doughnutChartType = 'doughnut';
+  public chartColors = [
+    { 
+      backgroundColor: ['#d13537', '#32CD32']
+    }
+  ];
+  public doughnutChartType: string = 'doughnut';
 }
