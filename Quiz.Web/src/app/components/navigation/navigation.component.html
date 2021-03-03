@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="navbar-collapse collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li *ngIf="!identityService.isAuthenticated()" class="nav-item">
+                <a class="nav-link" routerLink="/login">Login</a>
+            </li>
+            <li *ngIf="identityService.isAuthenticated()" class="nav-item">
+                <a class="nav-link" routerLink="/quiz">New Quiz</a>
+            </li>
+            <li *ngIf="identityService.isAuthenticated()" class="nav-item">
+                <a class="nav-link" (click)="identityService.logout()">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>

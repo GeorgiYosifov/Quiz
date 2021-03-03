@@ -1,0 +1,8 @@
+<div class="card mb-3">
+    <div class="card-body text-white bg-secondary">
+        <h5 class="card-title content">{{question.content}}</h5>
+        <div class="content" *ngFor="let answer of question.answers">
+            <app-answer [answer]="answer" (answerClicked)="announceOtherAnswers($event)"></app-answer>
+        </div>
+    </div>
+</div>

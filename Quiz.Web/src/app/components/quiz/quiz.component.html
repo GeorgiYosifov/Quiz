@@ -1,0 +1,6 @@
+<div class="container" *ngFor="let question of questions">
+    <app-question [question]="question" (emitSelection)="getSelection($event)"></app-question>
+</div>
+<div #chartDiv style="display: none" class="container">
+    <app-chart></app-chart>
+</div>

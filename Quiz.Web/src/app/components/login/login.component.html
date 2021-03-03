@@ -1,0 +1,20 @@
+<div class="container">
+    <form [formGroup]="form" (submit)="login()">
+        <div class="row space-top">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-control-label" for="new-make">Username</label>
+                    <input class="form-control" formControlName="username" type="text">
+                </div>
+                <div class="alert alert-danger" *ngIf="f.username.touched && f.username.errors?.required">
+                    Please provide a username!
+                </div>
+                <div class="alert alert-danger" *ngIf="f.username.errors?.username">
+                    Username is invalid!
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
