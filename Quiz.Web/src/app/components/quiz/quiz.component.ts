@@ -23,12 +23,16 @@ export class QuizComponent {
     private renderer: Renderer2) { }
 
   ngOnInit() {
+      this.GetQuestions();
+  }
+
+  public GetQuestions() {
     this.quizService.createQuiz().subscribe((data: number) => {
       localStorage.setItem('quizId', data.toString());
       this.quizService.getQuiz(data).subscribe(data => {
         this.questions = data['questions'];
       });
-    });    
+    });  
   }
 
   public getSelection(info: IUserSelection) {

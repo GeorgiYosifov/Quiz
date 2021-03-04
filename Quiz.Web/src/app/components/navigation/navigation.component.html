@@ -5,7 +5,10 @@
                 <a class="nav-link" routerLink="/login">Login</a>
             </li>
             <li *ngIf="identityService.isAuthenticated()" class="nav-item">
-                <a class="nav-link" routerLink="/quiz">New Quiz</a>
+                <a class="nav-link" (click)="newQuiz()">New Quiz</a>
+            </li>
+            <li *ngIf="identityService.isAuthenticated()" class="nav-item">
+                <a class="nav-link" routerLink="/history">History</a>
             </li>
             <li *ngIf="identityService.isAuthenticated()" class="nav-item">
                 <a class="nav-link" (click)="logout()">Logout</a>

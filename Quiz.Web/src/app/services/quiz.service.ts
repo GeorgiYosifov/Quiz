@@ -19,7 +19,7 @@ export class QuizService {
 
   public createQuiz(): Observable<number> {
     const userId = localStorage.getItem('userId');
-    return this.http.post<number>(this.url, userId);
+    return this.http.post<number>(this.url, { userId });
   }
 
   public checkQuiz(body: IQuizCheck) {

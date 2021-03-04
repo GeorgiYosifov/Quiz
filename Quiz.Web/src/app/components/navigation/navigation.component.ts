@@ -12,7 +12,17 @@ export class NavigationComponent {
   constructor(public identityService: IdentityService,
     private router: Router) { }
 
-  logout() {
+  public newQuiz() {
+    this.redirectTo('/quiz');
+  }
+
+  private redirectTo(uri:string) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([ uri ]);
+    });
+  }
+
+  public logout() {
     this.identityService.logout().subscribe(_ => {
       localStorage.clear();
       this.router.navigate([ '/login' ]);
