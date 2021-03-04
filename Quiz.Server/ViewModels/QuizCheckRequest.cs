@@ -6,6 +6,8 @@ namespace Quiz.Server.ViewModels
     {
         public int Id { get; set; }
 
+        public string UserId { get; set; }
+
         public ICollection<UserSelection> Selections { get; set; }
     }
 }

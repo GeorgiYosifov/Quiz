@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="p-2 flex-shrink-1" *ngIf="showTimer">
-                <app-timer></app-timer>
+                <app-timer (expiredTimerEmitter)="announceQuizForExpiredTimer()"></app-timer>
             </div>
         </div>
     </div>

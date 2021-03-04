@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { IQuestion } from 'src/app/models/quiz/question';
 import { IUserSelection } from 'src/app/models/quiz/user-selection';
 import { IQuizCheck } from 'src/app/models/quiz/quiz-check';
@@ -50,8 +50,10 @@ export class QuizComponent {
     this.onQuestion();
     this.userSelections.push(info);
     if (this.userSelections.length == this.questions.length) {
+      const userId = localStorage.getItem('userId');
       const body: IQuizCheck = {
         id: +localStorage.getItem('quizId'),
+        userId: userId,
         selections: this.userSelections
       };
 
@@ -62,6 +64,16 @@ export class QuizComponent {
     }
   }
 
+  public expiredTimer() {
+    const emptySelection: IUserSelection = {
+      questionId: -1,
+      answerId: -1
+    };
+    this.userSelections.push(emptySelection);
+    this.counter++;
+    this.onQuestion();
+  }
+
   private onQuestion() {
     this.questionComponents.toArray().forEach((q, i) => {
       if (i == this.counter) {
@@ -69,5 +81,19 @@ export class QuizComponent {
         q.manipulateAllAnswers(true);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.beforeUnload();
+  }
+
+  @HostListener('window:beforeunload')
+  private beforeUnload() {
+    // if (this.userSelections.length < 5) {
+    //   const result = confirm("Want to leave?");
+    //   if (!result) {
+    //     return null;
+    //   }
+    // }
   }
 }

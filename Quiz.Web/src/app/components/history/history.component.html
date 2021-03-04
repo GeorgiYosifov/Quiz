@@ -1,6 +1,14 @@
-<div class="d-flex justify-content-sm-around buttons">
-    <div *ngFor="let category of categories" class="btn btn-info" (click)="changeChartData(category.id)">{{category.name}}</div>
-</div>
-<div #chartDiv class="container" style="display: none">
-    <app-chart></app-chart>
-</div>
+<div *ngIf="allAnswers;then history else none_data"></div>
+<ng-template #history>
+    <div class="d-flex justify-content-sm-around buttons">
+        <div *ngFor="let category of categories" class="btn btn-info" (click)="changeChartData(category.id)">{{category.name}}</div>
+    </div>
+    <div #chartDiv class="container" style="display: none">
+        <app-chart></app-chart>
+    </div>
+</ng-template>
+<ng-template #none_data>
+    <div class="container pt-4">
+        <p>You need to complete atleast 3 test and then this page would get content to visualize for you!</p>
+    </div>
+</ng-template>

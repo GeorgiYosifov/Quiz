@@ -14,11 +14,16 @@ export class QuestionComponent {
   @ViewChildren(AnswerComponent) private answerComponents: QueryList<AnswerComponent>;
   @Input() question: IQuestion;
   @Output() emitSelection: EventEmitter<IUserSelection> = new EventEmitter<IUserSelection>();
+  @Output() expiredTimerEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   public showTimer: boolean;
 
   ngAfterViewInit() {
     this.manipulateAllAnswers(false);
+  }
+
+  public announceQuizForExpiredTimer() {
+    this.expiredTimerEmitter.emit();
   }
 
   public announceOtherAnswers(id: number) {

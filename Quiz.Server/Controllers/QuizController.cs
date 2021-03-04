@@ -47,7 +47,7 @@ namespace Quiz.Server.Controllers
         [HttpPatch]
         public QuizCheckResponse Check([FromBody] QuizCheckRequest quizCheck)
         {
-            return this.quizService.Check(quizCheck.Id, quizCheck.Selections);
+            return this.quizService.Check(quizCheck.Id, quizCheck.UserId, quizCheck.Selections);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Quiz.Server.Services
             this.db = db;
         }
 
-        public QuizCheckResponse Check(int quizId, ICollection<UserSelection> selections)
+        public QuizCheckResponse Check(int quizId, string userId, ICollection<UserSelection> selections)
         {
             var correctAnswers = this.db.QuestionQuizzes
                 .Where(qq => qq.QuizId == quizId)
@@ -46,6 +46,7 @@ namespace Quiz.Server.Services
                 }
             }
 
+            this.SetUserToQuiz(quizId, userId);
             this.AddToHistory(quizId, selections);
             return response;
         }
@@ -54,7 +55,7 @@ namespace Quiz.Server.Services
         {
             var rng = new Random();
             
-            var quiz = new Data.Quiz { Finished = DateTime.Now, UserId = userId };
+            var quiz = new Data.Quiz { Finished = DateTime.Now };
             await this.db.Quizzes.AddAsync(quiz);
             var questions = this.db.Questions.ToArray();
             var questionsForCurrentQuiz = new List<Question>();
@@ -195,6 +196,17 @@ namespace Quiz.Server.Services
                     QuestionId = selection.QuestionId,
                     AnswerId = selection.AnswerId
                 });
+            }
+
+            this.db.SaveChanges();
+        }
+
+        private void SetUserToQuiz(int quizId, string userId)
+        {
+            var quiz = this.db.Quizzes.FirstOrDefault(q => q.Id == quizId);
+            if (quiz != null)
+            {
+                quiz.UserId = userId;
             }
 
             this.db.SaveChanges();

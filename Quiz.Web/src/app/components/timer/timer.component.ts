@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-timer',
@@ -8,9 +8,11 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 export class TimerComponent {
   
   @ViewChild('timerDiv') private timerDiv: ElementRef;
+  @Output() expiredTimerEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   public readonly time = 45 * 1000; // ms
   public stackTimeout: { value: any } = { value: undefined };
+  public try: any;
 
   constructor(private renderer: Renderer2) { }
 
@@ -27,12 +29,13 @@ export class TimerComponent {
     const getTimeToString = this.getTimeToString;
     const stopTimer = this.stopTimer;
     const timerDiv = this.timerDiv;
+    const emitter = this.expiredTimerEmitter;
 
     stackTimeout.value = setTimeout(step, interval);
 
     function step() {
       if (expected > endTime) {
-        console.log('stop');
+        emitter.emit();
         return stopTimer(stackTimeout);
       }
 

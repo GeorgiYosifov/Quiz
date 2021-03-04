@@ -14,7 +14,7 @@ export class HistoryComponent {
   @ViewChild(ChartComponent) private chart: ChartComponent;
   @ViewChild('chartDiv') private chartDiv: ElementRef;
 
-  private allAnswers: IHistoryAnswer[];
+  public allAnswers: IHistoryAnswer[];
   public categories: ICategory[];
 
   constructor(private quizService: QuizService,
