@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ICategory } from '../models/quiz/category';
-import { IHistory } from '../models/quiz/history';
+import { IHistoryAnswer } from '../models/quiz/history-answer';
 import { IQuiz } from '../models/quiz/quiz';
 import { IQuizCheck } from '../models/quiz/quiz-check';
 import { IQuizResult } from '../models/quiz/quiz-result';
@@ -30,9 +30,9 @@ export class QuizService {
     return this.http.patch<IQuizResult>(this.url, body);
   }
 
-  public getHistory(): Observable<IHistory> {
+  public getHistory(): Observable<IHistoryAnswer[]> {
     const userId = localStorage.getItem('userId');
-    return this.http.get<IHistory>(this.getHistoryUrl + `/${userId}`);
+    return this.http.get<IHistoryAnswer[]>(this.getHistoryUrl + `/${userId}`);
   }
 
   public getCategories(): Observable<ICategory[]> {

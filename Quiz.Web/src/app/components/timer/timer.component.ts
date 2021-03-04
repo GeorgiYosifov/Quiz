@@ -9,7 +9,8 @@ export class TimerComponent {
   
   @ViewChild('timerDiv') private timerDiv: ElementRef;
 
-  private stackTimeout: { value: NodeJS.Timeout } = { value: undefined };
+  public readonly time = 45 * 1000; // ms
+  public stackTimeout: { value: any } = { value: undefined };
 
   constructor(private renderer: Renderer2) { }
 
@@ -17,10 +18,10 @@ export class TimerComponent {
     this.startTimer(this.stackTimeout);
   }
 
-  public startTimer(stackTimeout: { value: NodeJS.Timeout }) {
+  public startTimer(stackTimeout: { value: any }) {
     const interval: number = 1000; // ms
     let expected: number = Date.now() + interval;
-    const endTime: number = Date.now() + 45 * 1000;
+    const endTime: number = Date.now() + this.time;
 
     const renderer: Renderer2 = this.renderer;
     const getTimeToString = this.getTimeToString;
@@ -44,12 +45,12 @@ export class TimerComponent {
     }
   }
 
-  public stopTimer(stackTimeout: { value: NodeJS.Timeout }) {
+  public stopTimer(stackTimeout: { value: any }) {
     clearTimeout(stackTimeout.value);
     stackTimeout.value = undefined;
   }
 
-  private getTimeToString(time: number): string {
+  public getTimeToString(time: number): string {
     const minutes = Math.floor(time / (60 * 1000));
     const seconds = (Math.round((time / 1000) % 60)).toString();
     return `${minutes}:${seconds.length > 1 ? seconds : '0' + seconds}`;

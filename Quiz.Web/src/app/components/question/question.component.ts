@@ -11,17 +11,29 @@ import { TimerComponent } from '../timer/timer.component';
 })
 export class QuestionComponent {
   @ViewChild(TimerComponent) private timer: TimerComponent;
-  @ViewChild('timerDiv') private timerDiv: ElementRef;
   @ViewChildren(AnswerComponent) private answerComponents: QueryList<AnswerComponent>;
   @Input() question: IQuestion;
   @Output() emitSelection: EventEmitter<IUserSelection> = new EventEmitter<IUserSelection>();
 
+  public showTimer: boolean;
+
+  ngAfterViewInit() {
+    this.manipulateAllAnswers(false);
+  }
+
   public announceOtherAnswers(id: number) {
+    this.timer.stopTimer(this.timer.stackTimeout);
     const answerId: number = id;
     const questionId: number = this.question.id;
     this.emitSelection.emit({ questionId, answerId });
     this.answerComponents.forEach(a => {
       a.clickable = false;
+    });
+  }
+
+  public manipulateAllAnswers(freeze: boolean) {
+    this.answerComponents.forEach(a => {
+      a.clickable = freeze;
     });
   }
 }

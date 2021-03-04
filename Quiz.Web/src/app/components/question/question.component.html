@@ -1,13 +1,13 @@
 <div class="card mt-4">
     <div class="card-body text-white bg-info">
         <div class="d-flex justify-content-around">
-            <div>
+            <div class="p-2 w-100">
                 <h5 class="card-title content">{{question.content}}</h5>
-                <div class="content" *ngFor="let answer of question.answers">
+                <div class="content d-flex align-items-center flex-column mb-1" *ngFor="let answer of question.answers">
                     <app-answer [answer]="answer" (answerClicked)="announceOtherAnswers($event)"></app-answer>
                 </div>
             </div>
-            <div #timerDiv>
+            <div class="p-2 flex-shrink-1" *ngIf="showTimer">
                 <app-timer></app-timer>
             </div>
         </div>
