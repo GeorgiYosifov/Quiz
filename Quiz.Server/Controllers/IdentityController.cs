@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Quiz.Server.Data;
-using Quiz.Server.ViewModels;
-using System.Linq;
+using Quiz.Server.Services;
 using System.Threading.Tasks;
 
 namespace Quiz.Server.Controllers
@@ -9,43 +7,25 @@ namespace Quiz.Server.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly DataContext db;
+        private readonly IIdentityService identityService;
 
-        public IdentityController(DataContext db)
+        public IdentityController(IIdentityService identityService)
         {
-            this.db = db;
+            this.identityService = identityService;
         }
 
         [HttpPost("identity/login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var user = this.db.Users.FirstOrDefault(u => u.Username == request.Username);
-
-            if (user != null && user.IsLoggedIn)
+            var response = await this.identityService.LoginAsync(request.Username);
+            if (response.Id.Length != 0)
             {
-                return BadRequest(new UserLoginResponse
-                {
-                    Text = "Try later, a user with this username is already logged in!"
-                });
+                return Ok(response);
             }
             else
             {
-                await this.db.Users.AddAsync(new User()
-                {
-                    Username = request.Username,
-                    IsLoggedIn = true
-                });
-                await this.db.SaveChangesAsync();
+                return BadRequest(response);
             }
-
-            user = this.db.Users.FirstOrDefault(u => u.Username == request.Username);
-
-            return Ok(new UserLoginResponse
-            {
-                Id = user.Id,
-                Username = user.Username, 
-                Text = "You are in!"
-            });
         }
     }
 }

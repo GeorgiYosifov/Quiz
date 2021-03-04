@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quiz.Server.Data;
+using Quiz.Server.Services;
 
 namespace Quiz.Server
 {
@@ -37,6 +38,9 @@ namespace Quiz.Server
             });
 
             services.AddControllers();
+
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IQuizService, QuizService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
