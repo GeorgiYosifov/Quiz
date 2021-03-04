@@ -11,6 +11,10 @@ namespace Quiz.Server.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<History> Histories { get; set; }
+
+        public DbSet<Selection> Selections { get; set; }
+
         public DbSet<Quiz> Quizzes { get; set; }
 
         public DbSet<Question> Questions { get; set; }
