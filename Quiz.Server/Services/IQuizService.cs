@@ -13,5 +13,7 @@ namespace Quiz.Server.Services
         QuizCheckResponse Check(int quizId, ICollection<UserSelection> selections);
 
         Task<IList<AnswerHistoryViewModel>> GetOnlyThree(string userId);
+
+        IList<CategoryViewModel> GetCategories();
     }
 }

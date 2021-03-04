@@ -23,6 +23,12 @@ namespace Quiz.Server.Controllers
             return await this.quizService.GetOnlyThree(userId);
         }
 
+        [HttpGet("getCategories")]
+        public IList<CategoryViewModel> GetCategories()
+        {
+            return this.quizService.GetCategories();
+        }
+
 
         [HttpGet("{quizId}")]
         public async Task<QuizViewModel> GetById(int quizId)

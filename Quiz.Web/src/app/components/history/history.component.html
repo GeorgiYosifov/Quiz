@@ -1,1 +1,6 @@
-<p>history works!</p>
+<div class="d-flex justify-content-sm-around buttons">
+    <div *ngFor="let category of categories" class="btn btn-info" (click)="changeChartData(category.id)">{{category.name}}</div>
+</div>
+<div #chartDiv class="container" style="display: none">
+    <app-chart></app-chart>
+</div>

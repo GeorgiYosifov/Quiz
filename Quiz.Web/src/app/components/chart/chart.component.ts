@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class ChartComponent {
   public doughnutChartLabels: string[] = ['Wrong', 'Correct'];
-  public doughnutChartData = [];
+  public doughnutChartData: number[] = [];
   public chartColors = [
     { 
       backgroundColor: ['#d13537', '#32CD32']

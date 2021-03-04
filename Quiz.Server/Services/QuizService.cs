@@ -104,6 +104,17 @@ namespace Quiz.Server.Services
                 }).FirstOrDefaultAsync(q => q.Id == quizId);
         }
 
+        public IList<CategoryViewModel> GetCategories()
+        {
+            return this.db.Categories
+                .Select(c => new CategoryViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
+        }
+
         public async Task<IList<AnswerHistoryViewModel>> GetOnlyThree(string userId)
         {
             var user = await this.db.Users
