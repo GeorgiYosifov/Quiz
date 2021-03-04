@@ -11,5 +11,7 @@ namespace Quiz.Server.Services
         Task<int> CreateAsync(string userId);
 
         QuizCheckResponse Check(int quizId, ICollection<UserSelection> selections);
+
+        Task<IList<AnswerHistoryViewModel>> GetOnlyThree(string userId);
     }
 }

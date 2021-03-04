@@ -30,7 +30,7 @@ namespace Quiz.Server.Controllers
         }
 
         [HttpPatch("identity/logout")]
-        public async Task Logout(UserLogoutRequest request)
+        public async Task Logout(UserRequest request)
         {
             await this.identityService.LogoutAsync(request.UserId);
         }

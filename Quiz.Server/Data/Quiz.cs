@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quiz.Server.Data
 {
@@ -6,6 +7,8 @@ namespace Quiz.Server.Data
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        public DateTime? Finished { get; set; }
 
         public string UserId { get; set; }
 

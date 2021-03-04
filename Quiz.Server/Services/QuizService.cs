@@ -46,14 +46,15 @@ namespace Quiz.Server.Services
                 }
             }
 
+            this.AddToHistory(quizId, selections);
             return response;
         }
 
         public async Task<int> CreateAsync(string userId)
         {
             var rng = new Random();
-
-            var quiz = new Data.Quiz { UserId = userId };
+            
+            var quiz = new Data.Quiz { Finished = DateTime.Now, UserId = userId };
             await this.db.Quizzes.AddAsync(quiz);
             var questions = this.db.Questions.ToArray();
             var questionsForCurrentQuiz = new List<Question>();
@@ -101,6 +102,94 @@ namespace Quiz.Server.Services
                     UserId = q.UserId,
                     Questions = questions
                 }).FirstOrDefaultAsync(q => q.Id == quizId);
+        }
+
+        public async Task<IList<AnswerHistoryViewModel>> GetOnlyThree(string userId)
+        {
+            var user = await this.db.Users
+                .Select(u => new User 
+                {
+                    Id = u.Id,
+                    Quizzes = u.Quizzes
+                })
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            var userQuizzes = user.Quizzes;
+            if (userQuizzes.Count < 3)
+            {
+                return null;
+            }
+
+            var result = new List<AnswerHistoryViewModel>();
+
+            foreach (var quiz in userQuizzes.OrderByDescending(q => q.Finished).Take(3))
+            {
+                var quizQuestions = this.db.QuestionQuizzes
+                   .Where(qq => qq.QuizId == quiz.Id)
+                   .Select(qq => new QuestionSelectModel
+                   {
+                       Id = qq.QuestionId,
+                       CategoryId = qq.Question.CategoryId,
+                       Answers = qq.Question.Answers.Select(a => new AnswerSelectModel
+                       {
+                           Id = a.Id,
+                           IsCorrect = a.IsCorrect
+                       })
+                   })
+                   .ToList();
+
+                var historyQuiz = await this.db.Histories
+                    .Select(h => new History 
+                    {
+                        QuizId = h.QuizId,
+                        Selections = h.Selections.Select(s => new Selection 
+                        {
+                            QuestionId = s.QuestionId,
+                            AnswerId = s.AnswerId,
+                        })
+                        .ToList()
+                    })
+                    .FirstOrDefaultAsync(h => h.QuizId == quiz.Id);
+
+
+                foreach (var selection in historyQuiz.Selections)
+                {
+                    var question = quizQuestions
+                        .FirstOrDefault(q =>
+                            q.Answers.FirstOrDefault(a => a.Id == selection.AnswerId) != null
+                            && q.Id == selection.QuestionId);
+
+                    if (question != null) //check
+                    {
+                        var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
+
+                        result.Add(new AnswerHistoryViewModel
+                        {
+                            IsCorrect = neededAnswer.IsCorrect,
+                            CategoryId = question.CategoryId
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private void AddToHistory(int quizId, ICollection<UserSelection> selections)
+        {
+            var history = new History { QuizId = quizId };
+            this.db.Histories.Add(history);
+
+            foreach (var selection in selections)
+            {
+                this.db.Selections.Add(new Selection
+                {
+                    History = history,
+                    QuestionId = selection.QuestionId,
+                    AnswerId = selection.AnswerId
+                });
+            }
+
+            this.db.SaveChanges();
         }
     }
 }

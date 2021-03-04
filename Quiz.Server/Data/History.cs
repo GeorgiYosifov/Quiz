@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quiz.Server.Data
@@ -11,9 +10,8 @@ namespace Quiz.Server.Data
             this.Selections = new HashSet<Selection>();
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        public DateTime Finished { get; set; }
 
         [ForeignKey("null")]
         public int QuizId { get; set; }

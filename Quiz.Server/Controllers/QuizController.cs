@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Quiz.Server.Services;
 using Quiz.Server.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Quiz.Server.Controllers
@@ -16,6 +17,13 @@ namespace Quiz.Server.Controllers
             this.quizService = quizService;
         }
 
+        [HttpGet("getOnlyThree/{userId}")]
+        public async Task<IList<AnswerHistoryViewModel>> GetOnlyThree(string userId)
+        {
+            return await this.quizService.GetOnlyThree(userId);
+        }
+
+
         [HttpGet("{quizId}")]
         public async Task<QuizViewModel> GetById(int quizId)
         {
@@ -23,9 +31,9 @@ namespace Quiz.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string userId)
+        public async Task<IActionResult> Create(UserRequest request)
         {
-            var quizId = await this.quizService.CreateAsync(userId);
+            var quizId = await this.quizService.CreateAsync(request.UserId);
 
             return Created(nameof(this.Create), quizId);
         }

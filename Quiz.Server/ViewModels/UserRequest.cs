@@ -1,6 +1,6 @@
 ﻿namespace Quiz.Server.ViewModels
 {
-    public class UserLogoutRequest
+    public class UserRequest
     {
         public string UserId { get; set; }
     }
