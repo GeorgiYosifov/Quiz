@@ -17,6 +17,7 @@ import { QuizService } from './services/quiz.service';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { ChartsModule } from 'ng2-charts';
 import { ChartComponent } from './components/chart/chart.component';
+import { TimerComponent } from './components/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ChartComponent } from './components/chart/chart.component';
     CategoryComponent,
     HistoryComponent,
     NavigationComponent,
-    ChartComponent
+    ChartComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,

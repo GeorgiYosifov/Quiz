@@ -169,16 +169,13 @@ namespace Quiz.Server.Services
                             q.Answers.FirstOrDefault(a => a.Id == selection.AnswerId) != null
                             && q.Id == selection.QuestionId);
 
-                    if (question != null) //check
-                    {
-                        var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
+                    var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
 
-                        result.Add(new AnswerHistoryViewModel
-                        {
-                            IsCorrect = neededAnswer.IsCorrect,
-                            CategoryId = question.CategoryId
-                        });
-                    }
+                    result.Add(new AnswerHistoryViewModel
+                    {
+                        IsCorrect = neededAnswer.IsCorrect,
+                        CategoryId = question.CategoryId
+                    });
                 }
             }
 
