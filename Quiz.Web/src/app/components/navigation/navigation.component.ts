@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { IdentityService } from 'src/app/services/identity.service';
 
@@ -8,5 +9,13 @@ import { IdentityService } from 'src/app/services/identity.service';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent {
-  constructor(public identityService: IdentityService) { }
+  constructor(public identityService: IdentityService,
+    private router: Router) { }
+
+  logout() {
+    this.identityService.logout().subscribe(_ => {
+      localStorage.clear();
+      this.router.navigate([ '/login' ]);
+    });
+  }
 }

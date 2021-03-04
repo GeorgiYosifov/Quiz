@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators'
 
 import { environment } from 'src/environments/environment';
@@ -10,6 +11,7 @@ import { IUserLoginRequest } from '../models/identity/user-login-request';
 export class IdentityService {
   private API_URL = environment.API_URL;
   private readonly loginUrl = this.API_URL + '/identity/login';
+  private readonly logoutUrl = this.API_URL + '/identity/logout';
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -29,9 +31,9 @@ export class IdentityService {
     ).subscribe();
   }
 
-  public logout() {
-    localStorage.clear();
-    this.router.navigate([ '/login' ]);
+  public logout(): Observable<any> {
+    const userId: string = localStorage.getItem('userId');
+    return this.http.patch(this.logoutUrl, { userId });
   }
 
   public isAuthenticated(): Boolean {

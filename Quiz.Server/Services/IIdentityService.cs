@@ -6,5 +6,7 @@ namespace Quiz.Server.Services
     public interface IIdentityService
     {
         Task<UserLoginResponse> LoginAsync(string username);
+
+        Task LogoutAsync(string userId);
     }
 }

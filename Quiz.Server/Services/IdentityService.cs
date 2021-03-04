@@ -44,5 +44,16 @@ namespace Quiz.Server.Services
                 Text = "You are in!"
             };
         }
+
+        public async Task LogoutAsync(string userId)
+        {
+            var user = this.db.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user != null)
+            {
+                user.IsLoggedIn = false;
+                await this.db.SaveChangesAsync();
+            }
+        }
     }
 }

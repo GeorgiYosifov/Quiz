@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Quiz.Server.Services;
+using Quiz.Server.ViewModels;
 using System.Threading.Tasks;
 
 namespace Quiz.Server.Controllers
@@ -26,6 +27,12 @@ namespace Quiz.Server.Controllers
             {
                 return BadRequest(response);
             }
+        }
+
+        [HttpPatch("identity/logout")]
+        public async Task Logout(UserLogoutRequest request)
+        {
+            await this.identityService.LogoutAsync(request.UserId);
         }
     }
 }

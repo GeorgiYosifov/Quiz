@@ -8,7 +8,7 @@
                 <a class="nav-link" routerLink="/quiz">New Quiz</a>
             </li>
             <li *ngIf="identityService.isAuthenticated()" class="nav-item">
-                <a class="nav-link" (click)="identityService.logout()">Logout</a>
+                <a class="nav-link" (click)="logout()">Logout</a>
             </li>
         </ul>
     </div>
