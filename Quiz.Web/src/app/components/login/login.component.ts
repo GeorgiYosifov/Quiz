@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { IdentityService } from 'src/app/services/identity.service';
@@ -15,6 +15,7 @@ export class LoginComponent {
     private fb: FormBuilder) { }
 
   ngOnInit() {
+    localStorage.clear();
     this.form = this.fb.group({
       username: ['', Validators.required],
     })

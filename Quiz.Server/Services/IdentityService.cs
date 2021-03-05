@@ -16,7 +16,7 @@ namespace Quiz.Server.Services
 
         public async Task<UserLoginResponse> LoginAsync(string username)
         {
-            User user = this.db.Users.FirstOrDefault(u => u.Username == username);
+            var user = this.db.Users.FirstOrDefault(u => u.Username == username);
 
             if (user != null && user.IsLoggedIn)
             {
@@ -25,6 +25,10 @@ namespace Quiz.Server.Services
                     Text = "Try later, a user with this username is already logged in!"
                 };
             }
+            else if (user != null)
+            {
+                user.IsLoggedIn = true;
+            }
             else if (user == null)
             {
                 await this.db.Users.AddAsync(new User()
@@ -32,8 +36,8 @@ namespace Quiz.Server.Services
                     Username = username,
                     IsLoggedIn = true
                 });
-                await this.db.SaveChangesAsync();
             }
+            await this.db.SaveChangesAsync();
 
             user = this.db.Users.FirstOrDefault(u => u.Username == username);
 

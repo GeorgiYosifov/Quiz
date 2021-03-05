@@ -6,6 +6,7 @@ import { QuizService } from 'src/app/services/quiz.service';
 import { IQuizResult } from 'src/app/models/quiz/quiz-result';
 import { ChartComponent } from '../chart/chart.component';
 import { QuestionComponent } from '../question/question.component';
+import { IdentityService } from 'src/app/services/identity.service';
 
 @Component({
   selector: 'app-quiz',
@@ -23,6 +24,7 @@ export class QuizComponent {
   public questions: IQuestion[];
 
   constructor(private quizService: QuizService,
+    private identityService: IdentityService,
     private renderer: Renderer2,
     private cdref: ChangeDetectorRef) { }
 
@@ -91,17 +93,8 @@ export class QuizComponent {
     });
   }
 
-  ngOnDestroy() {
-    this.beforeUnload();
-  }
-
   @HostListener('window:beforeunload')
-  private beforeUnload() {
-    // if (this.userSelections.length < 5) {
-    //   const result = confirm("Want to leave?");
-    //   if (!result) {
-    //     return null;
-    //   }
-    // }
+  beforeUnload() {
+    this.identityService.logout().subscribe();
   }
 }
