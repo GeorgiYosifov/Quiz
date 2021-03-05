@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quiz.Server.Data;
@@ -18,8 +19,9 @@ namespace Quiz.Server
 
                 var context = services.GetRequiredService<DataContext>();
 
+                context.Database.Migrate();
                 CategoryDBInitializer.Seed(context);
-                QuestionDBInitializer.Seed(context);
+                QuestionDBInitializer.Seed(context);          
             }
 
             host.Run();

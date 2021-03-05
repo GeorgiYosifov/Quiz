@@ -1,0 +1,25 @@
+version: "3"
+services:
+  db:
+    container_name: sql-server-db
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "1433:1433"
+    environment: 
+      SA_PASSWORD: "Strongpassword1!"
+      ACCEPT_EULA: "Y"  
+  server:
+    container_name: web-server
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  ui:
+    container_name: ui
+    build: 
+      context: Quiz.Web/
+    ports:
+      - "5000:3000"
+    depends_on:
+      - server
