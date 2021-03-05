@@ -5,7 +5,6 @@ using Quiz.Server.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,7 +16,7 @@ namespace Quiz.Tests
         public async Task GetCategories_Should_ReturnAllCategories()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
-                 .UseInMemoryDatabase(databaseName: "quiz")
+                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                  .Options;
 
             using (var context = new DataContext(options))
@@ -39,7 +38,7 @@ namespace Quiz.Tests
         public async Task CreateAsync_Should_ReturnCorrectQuiz()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
-                            .UseInMemoryDatabase(databaseName: "quiz")
+                            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                             .Options;
 
             using (var context = new DataContext(options))

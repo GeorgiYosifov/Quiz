@@ -1,11 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Quiz.Server.Data;
 using Quiz.Server.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,13 +14,11 @@ namespace Quiz.Tests
         public async Task LoginAsync_Should_ReturnCorrectData()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
-                  .UseInMemoryDatabase(databaseName: "quiz")
+                  .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                   .Options;
 
             using (var context = new DataContext(options))
             {
-                await CleanUpUsers(context);
-
                 const string username = "test";
                 var service = new IdentityService(context);
                 var response = await service.LoginAsync(username);
@@ -34,17 +29,11 @@ namespace Quiz.Tests
             }
         }
 
-        private static async Task CleanUpUsers(DataContext context)
-        {
-            var users = await context.Users.ToListAsync();
-            context.Users.RemoveRange(users);
-        }
-
         [Fact]
         public async Task LogoutAsync_Should_SetIsLoggedInToFalse()
         {
             var options = new DbContextOptionsBuilder<DataContext>()
-                .UseInMemoryDatabase(databaseName: "quiz")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             using (var context = new DataContext(options))
