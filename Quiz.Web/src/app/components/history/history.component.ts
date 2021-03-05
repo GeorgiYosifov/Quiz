@@ -13,6 +13,7 @@ export class HistoryComponent {
 
   @ViewChild(ChartComponent) private chart: ChartComponent;
   @ViewChild('chartDiv') private chartDiv: ElementRef;
+  @ViewChild('categoriesDiv') private categoriesDiv: ElementRef;
   @ViewChild('pDiv') private pDiv: ElementRef;
 
   public allAnswers: IHistoryAnswer[];
@@ -33,12 +34,21 @@ export class HistoryComponent {
 
     this.quizService.getCategories().subscribe((data: ICategory[]) => {
       this.categories = data;
+      const all: ICategory = {
+        id: -1,
+        name: 'All'
+      }
+      this.categories.push(all);
     });
   }
 
   public changeChartData(categoryId: number) {
     if (this.allAnswers) {
-      this.setChartData(this.allAnswers.filter(a => a.categoryId == categoryId));
+      if (categoryId == -1) { //All Categories
+        this.setChartData(this.allAnswers);
+      } else {
+        this.setChartData(this.allAnswers.filter(a => a.categoryId == categoryId));
+      }
     }
   }
 
@@ -54,5 +64,6 @@ export class HistoryComponent {
     });
     this.chart.doughnutChartData = [ wrong, correct ];
     this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
+    this.renderer.removeStyle(this.categoriesDiv.nativeElement, 'display');
   }
 }

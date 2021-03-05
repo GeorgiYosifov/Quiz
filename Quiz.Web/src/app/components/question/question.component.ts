@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { IQuestion } from 'src/app/models/quiz/question';
 import { IUserSelection } from 'src/app/models/quiz/user-selection';
 import { AnswerComponent } from '../answer/answer.component';
@@ -16,7 +16,7 @@ export class QuestionComponent {
   @Output() emitSelection: EventEmitter<IUserSelection> = new EventEmitter<IUserSelection>();
   @Output() expiredTimerEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public showTimer: boolean;
+  public showTimer: boolean = false;
 
   ngAfterViewInit() {
     this.manipulateAllAnswers(false);

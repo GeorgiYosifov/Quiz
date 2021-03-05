@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { IQuestion } from 'src/app/models/quiz/question';
 import { IUserSelection } from 'src/app/models/quiz/user-selection';
 import { IQuizCheck } from 'src/app/models/quiz/quiz-check';
@@ -19,12 +19,12 @@ export class QuizComponent {
   @ViewChild('chartDiv') private chartDiv: ElementRef;
 
   private userSelections: IUserSelection[] = [];
-  private counter: number = 0;
 
   public questions: IQuestion[];
 
   constructor(private quizService: QuizService,
-    private renderer: Renderer2) { }
+    private renderer: Renderer2,
+    private cdref: ChangeDetectorRef) { }
 
   ngOnInit() {
       this.GetQuestions();
@@ -33,6 +33,7 @@ export class QuizComponent {
   ngAfterViewInit() {
     this.questionComponents.changes.subscribe(() => {
       this.onQuestion(true);
+      this.cdref.detectChanges();
     });
   }
 
@@ -46,9 +47,26 @@ export class QuizComponent {
   }
 
   public getSelection(info: IUserSelection) {
-    this.counter++;
-    this.onQuestion(true);
     this.userSelections.push(info);
+    this.onQuestion(true);
+    this.tryToCheckQuiz();
+  }
+
+  public expiredTimer() {
+    const emptySelection: IUserSelection = {
+      questionId: -1,
+      answerId: -1
+    };
+    this.onQuestion(false);
+    this.userSelections.push(emptySelection);
+    if (this.userSelections.length == this.questions.length) {
+      this.tryToCheckQuiz();
+    } else {
+      this.onQuestion(true);
+    }
+  }
+
+  private tryToCheckQuiz() {
     if (this.userSelections.length == this.questions.length) {
       const userId = localStorage.getItem('userId');
       const body: IQuizCheck = {
@@ -64,20 +82,9 @@ export class QuizComponent {
     }
   }
 
-  public expiredTimer() {
-    const emptySelection: IUserSelection = {
-      questionId: -1,
-      answerId: -1
-    };
-    this.userSelections.push(emptySelection);
-    this.onQuestion(false);
-    this.counter++;
-    this.onQuestion(true);
-  }
-
   private onQuestion(clickable: boolean) {
     this.questionComponents.toArray().forEach((q, i) => {
-      if (i == this.counter) {
+      if (i == this.userSelections.length) {
         q.showTimer = true;
         q.manipulateAllAnswers(clickable);
       }

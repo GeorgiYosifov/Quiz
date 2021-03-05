@@ -12,7 +12,6 @@ export class TimerComponent {
 
   public readonly time = 45 * 1000; // ms
   public stackTimeout: { value: any } = { value: undefined };
-  public try: any;
 
   constructor(private renderer: Renderer2) { }
 
