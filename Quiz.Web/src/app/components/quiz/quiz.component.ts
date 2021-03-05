@@ -32,7 +32,7 @@ export class QuizComponent {
 
   ngAfterViewInit() {
     this.questionComponents.changes.subscribe(() => {
-      this.onQuestion();
+      this.onQuestion(true);
     });
   }
 
@@ -47,7 +47,7 @@ export class QuizComponent {
 
   public getSelection(info: IUserSelection) {
     this.counter++;
-    this.onQuestion();
+    this.onQuestion(true);
     this.userSelections.push(info);
     if (this.userSelections.length == this.questions.length) {
       const userId = localStorage.getItem('userId');
@@ -70,15 +70,16 @@ export class QuizComponent {
       answerId: -1
     };
     this.userSelections.push(emptySelection);
+    this.onQuestion(false);
     this.counter++;
-    this.onQuestion();
+    this.onQuestion(true);
   }
 
-  private onQuestion() {
+  private onQuestion(clickable: boolean) {
     this.questionComponents.toArray().forEach((q, i) => {
       if (i == this.counter) {
         q.showTimer = true;
-        q.manipulateAllAnswers(true);
+        q.manipulateAllAnswers(clickable);
       }
     });
   }

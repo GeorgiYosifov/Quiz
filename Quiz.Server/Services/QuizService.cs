@@ -36,6 +36,8 @@ namespace Quiz.Server.Services
 
             foreach (var selection in selections)
             {
+                if (selection.QuestionId == -1 && selection.AnswerId == -1) continue; // isn't selected by user
+
                 if (correctAnswers.Any(c => c.QuestionId == selection.QuestionId && c.AnswerId == selection.AnswerId))
                 {
                     response.Correct++;
@@ -170,13 +172,16 @@ namespace Quiz.Server.Services
                             q.Answers.FirstOrDefault(a => a.Id == selection.AnswerId) != null
                             && q.Id == selection.QuestionId);
 
-                    var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
-
-                    result.Add(new AnswerHistoryViewModel
+                    if (question != null)
                     {
-                        IsCorrect = neededAnswer.IsCorrect,
-                        CategoryId = question.CategoryId
-                    });
+                        var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
+
+                        result.Add(new AnswerHistoryViewModel
+                        {
+                            IsCorrect = neededAnswer.IsCorrect,
+                            CategoryId = question.CategoryId
+                        });
+                    }
                 }
             }
 

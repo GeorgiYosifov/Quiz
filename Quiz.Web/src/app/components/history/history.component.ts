@@ -13,6 +13,7 @@ export class HistoryComponent {
 
   @ViewChild(ChartComponent) private chart: ChartComponent;
   @ViewChild('chartDiv') private chartDiv: ElementRef;
+  @ViewChild('pDiv') private pDiv: ElementRef;
 
   public allAnswers: IHistoryAnswer[];
   public categories: ICategory[];
@@ -20,12 +21,13 @@ export class HistoryComponent {
   constructor(private quizService: QuizService,
     private renderer: Renderer2) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.quizService.getHistory().subscribe((data: IHistoryAnswer[]) => {
       if (data) {
         this.allAnswers = data;
         this.setChartData(this.allAnswers);
-        this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
+      } else {
+        this.renderer.removeStyle(this.pDiv.nativeElement, 'display');
       }
     });
 
@@ -51,5 +53,6 @@ export class HistoryComponent {
       }
     });
     this.chart.doughnutChartData = [ wrong, correct ];
+    this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
   }
 }
