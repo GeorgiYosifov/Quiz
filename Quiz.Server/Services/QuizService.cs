@@ -31,14 +31,17 @@ namespace Quiz.Server.Services
             var response = new QuizCheckResponse
             {
                 Correct = 0,
-                Wrong = 0
+                Wrong = 0,
+                Unselected = 0
             };
 
             foreach (var selection in selections)
             {
-                if (selection.QuestionId == -1 && selection.AnswerId == -1) continue; // isn't selected by user
-
-                if (correctAnswers.Any(c => c.QuestionId == selection.QuestionId && c.AnswerId == selection.AnswerId))
+                if (selection.AnswerId == -1)
+                {
+                    response.Unselected++;
+                }
+                else if (correctAnswers.Any(c => c.QuestionId == selection.QuestionId && c.AnswerId == selection.AnswerId))
                 {
                     response.Correct++;
                 }
@@ -169,16 +172,24 @@ namespace Quiz.Server.Services
                 {
                     var question = quizQuestions
                         .FirstOrDefault(q =>
-                            q.Answers.FirstOrDefault(a => a.Id == selection.AnswerId) != null
+                            (q.Answers.FirstOrDefault(a => a.Id == selection.AnswerId) != null || selection.AnswerId == -1)
                             && q.Id == selection.QuestionId);
 
-                    if (question != null)
+                    if (selection.AnswerId == -1) //Unselected
+                    {
+                        result.Add(new AnswerHistoryViewModel
+                        {
+                            IsCorrect = -1,
+                            CategoryId = question.CategoryId
+                        });
+                    }
+                    else
                     {
                         var neededAnswer = question.Answers.FirstOrDefault(a => a.Id == selection.AnswerId);
 
                         result.Add(new AnswerHistoryViewModel
                         {
-                            IsCorrect = neededAnswer.IsCorrect,
+                            IsCorrect = Convert.ToInt32(neededAnswer.IsCorrect),
                             CategoryId = question.CategoryId
                         });
                     }
@@ -208,10 +219,11 @@ namespace Quiz.Server.Services
 
         private void SetUserToQuiz(int quizId, string userId)
         {
+            var user = this.db.Users.FirstOrDefault(u => u.Id == userId);
             var quiz = this.db.Quizzes.FirstOrDefault(q => q.Id == quizId);
             if (quiz != null)
             {
-                quiz.UserId = userId;
+                quiz.User = user;
             }
 
             this.db.SaveChanges();

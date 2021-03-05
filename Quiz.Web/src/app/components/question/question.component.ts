@@ -14,7 +14,7 @@ export class QuestionComponent {
   @ViewChildren(AnswerComponent) private answerComponents: QueryList<AnswerComponent>;
   @Input() question: IQuestion;
   @Output() emitSelection: EventEmitter<IUserSelection> = new EventEmitter<IUserSelection>();
-  @Output() expiredTimerEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() expiredTimerEmitter: EventEmitter<number> = new EventEmitter<number>();
 
   public showTimer: boolean = false;
 
@@ -23,7 +23,8 @@ export class QuestionComponent {
   }
 
   public announceQuizForExpiredTimer() {
-    this.expiredTimerEmitter.emit();
+    const questionId: number = this.question.id;
+    this.expiredTimerEmitter.emit(questionId);
   }
 
   public announceOtherAnswers(id: number) {

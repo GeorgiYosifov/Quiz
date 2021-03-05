@@ -53,16 +53,19 @@ export class HistoryComponent {
   }
 
   private setChartData(answers: IHistoryAnswer[]) {
+    let unselected: number = 0;
     let wrong: number = 0;
     let correct: number = 0;
     answers.forEach(a => {
-      if (a.isCorrect) {
+      if (a.isCorrect == -1) {
+        unselected++;
+      } else if (a.isCorrect == 1) {
         correct++;
-      } else {
+      } else if (a.isCorrect == 0) {
         wrong++;
       }
     });
-    this.chart.doughnutChartData = [ wrong, correct ];
+    this.chart.doughnutChartData = [ unselected, wrong, correct ];
     this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
     this.renderer.removeStyle(this.categoriesDiv.nativeElement, 'display');
   }

@@ -52,9 +52,9 @@ export class QuizComponent {
     this.tryToCheckQuiz();
   }
 
-  public expiredTimer() {
+  public expiredTimer(questionId: number) {
     const emptySelection: IUserSelection = {
-      questionId: -1,
+      questionId: questionId,
       answerId: -1
     };
     this.onQuestion(false);
@@ -76,7 +76,7 @@ export class QuizComponent {
       };
 
       this.quizService.checkQuiz(body).subscribe((data: IQuizResult) => {
-        this.chart.doughnutChartData = [data.wrong, data.correct];
+        this.chart.doughnutChartData = [ data.unselected, data.wrong, data.correct];
         this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
       });
     }
