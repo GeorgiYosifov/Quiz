@@ -11,6 +11,7 @@ services:
   server:
     container_name: web-server
     build: .
+    restart: on-failure
     ports:
       - "8080:80"
     depends_on:

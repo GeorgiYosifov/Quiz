@@ -1,6 +1,8 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Renderer2, ViewChild } from '@angular/core';
+import { AnswerType } from 'src/app/models/quiz/answer-type';
 import { ICategory } from 'src/app/models/quiz/category';
 import { IHistoryAnswer } from 'src/app/models/quiz/history-answer';
+import { IdentityService } from 'src/app/services/identity.service';
 import { QuizService } from 'src/app/services/quiz.service';
 import { ChartComponent } from '../chart/chart.component';
 
@@ -20,6 +22,7 @@ export class HistoryComponent {
   public categories: ICategory[];
 
   constructor(private quizService: QuizService,
+    private identityService: IdentityService,
     private renderer: Renderer2) { }
 
   ngAfterViewInit() {
@@ -27,6 +30,7 @@ export class HistoryComponent {
       if (data) {
         this.allAnswers = data;
         this.setChartData(this.allAnswers);
+        this.renderer.setStyle(this.pDiv.nativeElement, 'display', 'none');
       } else {
         this.renderer.removeStyle(this.pDiv.nativeElement, 'display');
       }
@@ -57,16 +61,21 @@ export class HistoryComponent {
     let wrong: number = 0;
     let correct: number = 0;
     answers.forEach(a => {
-      if (a.isCorrect == -1) {
+      if (a.type == AnswerType.Unselected) {
         unselected++;
-      } else if (a.isCorrect == 1) {
-        correct++;
-      } else if (a.isCorrect == 0) {
+      } else if (a.type == AnswerType.Wrong) {
         wrong++;
+      } else if (a.type == AnswerType.Correct) {
+        correct++;
       }
     });
     this.chart.doughnutChartData = [ unselected, wrong, correct ];
     this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
     this.renderer.removeStyle(this.categoriesDiv.nativeElement, 'display');
+  }
+
+  @HostListener('window:beforeunload')
+  beforeUnload() {
+    this.identityService.logout().subscribe();
   }
 }

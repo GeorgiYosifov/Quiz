@@ -4,6 +4,6 @@
     {
         public int CategoryId { get; set; }
 
-        public int IsCorrect { get; set; }
+        public AnswerType Type { get; set; }
     }
 }

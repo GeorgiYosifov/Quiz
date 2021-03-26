@@ -19,7 +19,7 @@ namespace Quiz.Server.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             var response = await this.identityService.LoginAsync(request.Username);
-            if (response.Id.Length != 0)
+            if (response.Id != string.Empty)
             {
                 return Ok(response);
             }

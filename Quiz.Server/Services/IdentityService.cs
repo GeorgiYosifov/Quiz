@@ -22,6 +22,8 @@ namespace Quiz.Server.Services
             {
                 return new UserLoginResponse
                 {
+                    Id = string.Empty,
+                    Username = string.Empty,
                     Text = "Try later, a user with this username is already logged in!"
                 };
             }

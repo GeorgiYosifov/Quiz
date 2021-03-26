@@ -179,7 +179,7 @@ namespace Quiz.Server.Services
                     {
                         result.Add(new AnswerHistoryViewModel
                         {
-                            IsCorrect = -1,
+                            Type = AnswerType.Unselected,
                             CategoryId = question.CategoryId
                         });
                     }
@@ -189,7 +189,7 @@ namespace Quiz.Server.Services
 
                         result.Add(new AnswerHistoryViewModel
                         {
-                            IsCorrect = Convert.ToInt32(neededAnswer.IsCorrect),
+                            Type = neededAnswer.IsCorrect ? AnswerType.Correct : AnswerType.Wrong,
                             CategoryId = question.CategoryId
                         });
                     }

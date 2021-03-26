@@ -10,7 +10,6 @@ import { LoginComponent } from './components/login/login.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { QuestionComponent } from './components/question/question.component';
 import { AnswerComponent } from './components/answer/answer.component';
-import { CategoryComponent } from './components/category/category.component';
 import { HistoryComponent } from './components/history/history.component';
 import { IdentityService } from './services/identity.service';
 import { QuizService } from './services/quiz.service';
@@ -26,7 +25,6 @@ import { TimerComponent } from './components/timer/timer.component';
     QuizComponent,
     QuestionComponent,
     AnswerComponent,
-    CategoryComponent,
     HistoryComponent,
     NavigationComponent,
     ChartComponent,

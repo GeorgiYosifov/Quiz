@@ -7,6 +7,7 @@ import { IQuizResult } from 'src/app/models/quiz/quiz-result';
 import { ChartComponent } from '../chart/chart.component';
 import { QuestionComponent } from '../question/question.component';
 import { IdentityService } from 'src/app/services/identity.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-quiz',
@@ -14,12 +15,12 @@ import { IdentityService } from 'src/app/services/identity.service';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent {
-
   @ViewChildren(QuestionComponent) private questionComponents: QueryList<QuestionComponent>;
   @ViewChild(ChartComponent) private chart: ChartComponent;
   @ViewChild('chartDiv') private chartDiv: ElementRef;
 
   private userSelections: IUserSelection[] = [];
+  private subscriptions: Subscription[] = [];
 
   public questions: IQuestion[];
 
@@ -33,19 +34,19 @@ export class QuizComponent {
   }
 
   ngAfterViewInit() {
-    this.questionComponents.changes.subscribe(() => {
+    this.subscriptions.push(this.questionComponents.changes.subscribe(() => {
       this.onQuestion(true);
       this.cdref.detectChanges();
-    });
+    }));
   }
 
   public GetQuestions() {
-    this.quizService.createQuiz().subscribe((data: number) => {
+    this.subscriptions.push(this.quizService.createQuiz().subscribe((data: number) => {
       localStorage.setItem('quizId', data.toString());
       this.quizService.getQuiz(data).subscribe(data => {
         this.questions = data['questions'];
       });
-    });  
+    }));  
   }
 
   public getSelection(info: IUserSelection) {
@@ -57,7 +58,7 @@ export class QuizComponent {
   public expiredTimer(questionId: number) {
     const emptySelection: IUserSelection = {
       questionId: questionId,
-      answerId: -1
+      answerId: -1 //Unselected
     };
     this.onQuestion(false);
     this.userSelections.push(emptySelection);
@@ -77,10 +78,10 @@ export class QuizComponent {
         selections: this.userSelections
       };
 
-      this.quizService.checkQuiz(body).subscribe((data: IQuizResult) => {
+      this.subscriptions.push(this.quizService.checkQuiz(body).subscribe((data: IQuizResult) => {
         this.chart.doughnutChartData = [ data.unselected, data.wrong, data.correct];
         this.renderer.removeStyle(this.chartDiv.nativeElement, 'display');
-      });
+      }));
     }
   }
 
@@ -95,6 +96,10 @@ export class QuizComponent {
 
   @HostListener('window:beforeunload')
   beforeUnload() {
-    this.identityService.logout().subscribe();
+    this.subscriptions.push(this.identityService.logout().subscribe());
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

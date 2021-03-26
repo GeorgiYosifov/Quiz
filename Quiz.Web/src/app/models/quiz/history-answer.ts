@@ -1,4 +1,6 @@
+import { AnswerType } from "./answer-type";
+
 export interface IHistoryAnswer {
     categoryId: number;
-    isCorrect: number;
+    type: AnswerType;
 }
